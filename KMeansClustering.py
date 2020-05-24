@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 from matplotlib import pyplot as plt
 import seaborn as sns
 from sklearn.cluster import KMeans
@@ -18,6 +17,17 @@ plt.show()
 
 X = df.drop(["sepal width (cm)","sepal length (cm)","target"], axis=1)
 y = iris.target
+
+# If we don't know how many clusters are there, then we should check score of the model 
+# and decide the number of cluster after which increasing clusters does not increase score significantly.
+
+clusters = range(1,10)
+models = [KMeans(n_clusters=i) for i in clusters]
+scores = [models[i].fit(X).score(X) for i in range(len(clusters))]
+print(scores)
+
+# So if we didn't know number of clusters before hand, then we would have made only 2 clusters.
+# But Iris data has 3 clusters, so we will compare Kmeans predictions with 3 clusters.
 
 model = KMeans(n_clusters=3, n_init=30).fit(scale(X))
 predictions = model.labels_
